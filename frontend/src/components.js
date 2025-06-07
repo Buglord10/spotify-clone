@@ -8,13 +8,17 @@ import {
   HiPlus,
   HiPlay,
   HiPause,
-  HiSkipBack,
-  HiSkipForward,
   HiVolumeUp,
-  HiDotsHorizontal,
-  HiShuffle,
-  HiRefresh
+  HiDotsHorizontal
 } from 'react-icons/hi';
+import { 
+  HiBackward,
+  HiForward,
+  HiArrowPath as HiRefresh
+} from 'react-icons/hi2';
+import { 
+  TbShuffle as HiShuffle
+} from 'react-icons/tb';
 import { BsSpotify } from 'react-icons/bs';
 
 // Mock Data
