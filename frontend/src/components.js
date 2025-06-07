@@ -14,11 +14,9 @@ import {
 import { 
   HiBackward,
   HiForward,
-  HiArrowPath as HiRefresh
+  HiArrowPath as HiRefresh,
+  HiArrowsRightLeft as HiShuffle
 } from 'react-icons/hi2';
-import { 
-  TbShuffle as HiShuffle
-} from 'react-icons/tb';
 import { BsSpotify } from 'react-icons/bs';
 
 // Mock Data
