@@ -318,7 +318,7 @@ export const Player = ({ currentTrack, isPlaying, setIsPlaying, volume, setVolum
               <HiShuffle />
             </button>
             <button className="text-gray-400 hover:text-white">
-              <HiSkipBack />
+              <HiBackward />
             </button>
             <button 
               onClick={() => setIsPlaying(!isPlaying)}
