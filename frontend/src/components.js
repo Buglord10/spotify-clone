@@ -327,7 +327,7 @@ export const Player = ({ currentTrack, isPlaying, setIsPlaying, volume, setVolum
               {isPlaying ? <HiPause className="text-black" /> : <HiPlay className="text-black ml-1" />}
             </button>
             <button className="text-gray-400 hover:text-white">
-              <HiSkipForward />
+              <HiForward />
             </button>
             <button 
               onClick={() => setRepeatMode(repeatMode === 'off' ? 'all' : repeatMode === 'all' ? 'one' : 'off')}
