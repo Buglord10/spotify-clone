@@ -1,52 +1,121 @@
-import { useEffect } from "react";
-import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from 'react';
+import './App.css';
+import { 
+  Sidebar, 
+  TopBar, 
+  HomeView, 
+  SearchView, 
+  PlaylistView, 
+  LibraryView, 
+  Player 
+} from './components';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+function App() {
+  const [currentView, setCurrentView] = useState('home');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentTrack, setCurrentTrack] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(75);
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
+  const handleTrackSelect = (track) => {
+    setCurrentTrack(track);
+    setIsPlaying(true);
+  };
+
+  const renderMainContent = () => {
+    if (typeof currentView === 'object') {
+      switch (currentView.type) {
+        case 'playlist':
+          return (
+            <>
+              <TopBar title={currentView.data.name} />
+              <PlaylistView 
+                playlist={currentView.data} 
+                onTrackSelect={handleTrackSelect}
+                currentTrack={currentTrack}
+                isPlaying={isPlaying}
+              />
+            </>
+          );
+        case 'artist':
+          return (
+            <>
+              <TopBar title={currentView.data.name} />
+              <PlaylistView 
+                playlist={{
+                  ...currentView.data,
+                  tracks: 42,
+                  color: "from-red-900 to-black"
+                }} 
+                onTrackSelect={handleTrackSelect}
+                currentTrack={currentTrack}
+                isPlaying={isPlaying}
+              />
+            </>
+          );
+        default:
+          return (
+            <>
+              <TopBar />
+              <HomeView setCurrentView={setCurrentView} onTrackSelect={handleTrackSelect} />
+            </>
+          );
+      }
+    }
+
+    switch (currentView) {
+      case 'search':
+        return (
+          <>
+            <TopBar 
+              title="Search" 
+              showSearch={true} 
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+            />
+            <SearchView 
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              setCurrentView={setCurrentView}
+              onTrackSelect={handleTrackSelect}
+            />
+          </>
+        );
+      case 'library':
+        return (
+          <>
+            <TopBar title="Your Library" />
+            <LibraryView setCurrentView={setCurrentView} />
+          </>
+        );
+      default:
+        return (
+          <>
+            <TopBar />
+            <HomeView setCurrentView={setCurrentView} onTrackSelect={handleTrackSelect} />
+          </>
+        );
     }
   };
 
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
-
   return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
-
-function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+    <div className="App bg-gray-900 text-white min-h-screen flex flex-col">
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar 
+          currentView={currentView} 
+          setCurrentView={setCurrentView}
+        />
+        <main className="flex-1 overflow-y-auto bg-gradient-to-b from-gray-800 to-gray-900">
+          {renderMainContent()}
+        </main>
+      </div>
+      <Player 
+        currentTrack={currentTrack}
+        isPlaying={isPlaying}
+        setIsPlaying={setIsPlaying}
+        volume={volume}
+        setVolume={setVolume}
+      />
     </div>
   );
 }
